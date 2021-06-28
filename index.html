@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<style>
+    * {
+        padding: 0;
+        margin: 0;
+    }
+
+    canvas {
+        background: greenyellow;
+        display: block;
+        margin: 0 auto;
+    }
+</style>
+</head>
+<body>
+<canvas id="myCanvas" width="480" height="320"></canvas>
+
+</body>
+<script>
+    let canvas = document.getElementById("myCanvas");
+    let ctx = canvas.getContext("2d");
+    let x = 240;
+    let y = 290;
+    let ballRadius = 10;
+    let dx = 2;
+    let dy = -2;
+    let paddle = { width:50,
+        higth:10,
+        x1:207,
+        y1: 310,
+        speed:20,
+        ismovingleft :false,
+        ismovingright: false,};
+
+    document.addEventListener('keyup', keyuphan,false );
+    document.addEventListener('keydown', keyDownhan,false);
+
+    function  keyuphan (event)
+    { if(event.keyCode == 37 ){
+        ismovingright = false;}
+    else if ( event.keyCode == 39){
+        ismovingleft =  false;
+    }
+
+
+    }
+
+    function  keyDownhan (event)
+    { if(event.keyCode == 37){
+        ismovingright = true;}
+    else if ( event.keyCode == 39){
+        ismovingleft =  true;
+    }
+
+
+    }
+
+
+
+
+    function drawBall() {
+        ctx.beginPath();
+        ctx.arc(x, y, ballRadius, 0, Math.PI * 2);
+        ctx.fillStyle = "red";
+        ctx.fill();
+        ctx.closePath();
+    }
+
+
+    function drawPaddle() {
+        ctx.beginPath();
+        ctx.rect(paddle.x1,paddle.y1,paddle.width,paddle.higth);
+        ctx.fillStyle = "red";
+        ctx.fill();
+        ctx.closePath();
+    }
+    function xulychan(){
+        if (x + dx > canvas.width - ballRadius || x + dx < ballRadius) {
+            dx = -dx;
+        }
+        if (y + dy < ballRadius ||y + dy > canvas.height - ballRadius) {
+            dy = -dy;
+        }
+
+    }
+    function updatechan (){
+        x += dx;
+        y += dy;
+
+    }
+
+    function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        drawBall();
+        drawPaddle();
+        if(paddle.ismovingleft){
+            paddle.x -= paddle.speed;
+        } else if (paddle.ismovingright){
+            paddle.x += paddle.speed;
+        }
+        if(paddle.x<240) paddle.x=240;
+        else if (paddle.x>canvas.width- paddle.width) paddle.x = canvas.width - paddle.width;
+        xulychan();
+        updatechan();
+        requestAnimationFrame(draw);
+    }
+    draw();
+
+
+</script>
+
+
+</html>
